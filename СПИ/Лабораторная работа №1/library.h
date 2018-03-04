@@ -7,6 +7,5 @@ typedef struct {
 
 extern char first_string[];
 extern char second_string[];
-extern int threadStart[];
 extern int threadEnd[];
 extern int numberThreadRun;

@@ -8,7 +8,6 @@ void *thread_read_or_write(void *args) {
   char readBufSymbol[2];
   number_thread *number = (number_thread *) args;
   int type_thread = number->type_thread;
-
   if (type_thread == 0) {
     FILE *in1_file = fopen("inFile1.txt", "r");
     while (1) {
@@ -34,7 +33,7 @@ void *thread_read_or_write(void *args) {
       if (numberThreadRun == 1) {
         memset(readBufSymbol, 0, sizeof(readBufSymbol));
         if ((fgets(readBufSymbol, 2, in2_file) != NULL)) {
-          if (readBufSymbol[0] != '\n') strcat(second_string , readBufSymbol);
+          if (readBufSymbol[0] != '\n') strcat(second_string, readBufSymbol);
           numberThreadRun = 13;
         } else {
           threadEnd[1] = 1;
