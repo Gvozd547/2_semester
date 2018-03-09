@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 int main(int argc, char const *argv[]) {
 
@@ -28,11 +29,7 @@ int main(int argc, char const *argv[]) {
     number_of_operations_in_cell[i] = 0;
   }
 
-  status_conveyor[0] = 1;
-  number_of_operations_in_cell[0] = rand() % 4 + 4;
-
   while (amount_of_number > 0) {
-
     conveyor(status_conveyor, number_of_operations_in_cell, length_of_conveyor,
              &amount_of_number);
     result += 1;
