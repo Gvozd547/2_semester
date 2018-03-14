@@ -14,7 +14,8 @@ int main(int argc, char const *argv[]) {
   int result = 0;
   srand(time(NULL));
 
-  puts("Cинхронный конвеер, количество тактов на единицу конвеера от 3 до 7 (const = 7)");
+  puts("Cинхронный конвеер, количество тактов на единицу конвеера от 3 до 7 "
+       "(const = 7)");
   puts("Введите количество обрабатываемых чисел: ");
   scanf("%i", &amount_of_number);
   puts("Введите длину конвеера");
@@ -30,12 +31,13 @@ int main(int argc, char const *argv[]) {
   }
 
   status_conveyor[0] = 1;
-  number_of_operations_in_cell[0] = 7;
+  number_of_operations_in_cell[0] = 7 - 1;
+  result++;
 
   while (amount_of_number > 0) {
     conveyor(status_conveyor, number_of_operations_in_cell, length_of_conveyor,
              &amount_of_number);
-    result += 1;
+    result++;
   }
 
   printf("Количество операций: %i\n", result);
