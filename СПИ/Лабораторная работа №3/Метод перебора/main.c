@@ -17,21 +17,14 @@ int main() {
   distance_matrix = (int **)malloc(number_modes * sizeof(int *));
 
   generation_matrix_distance(distance_matrix, number_modes);
+  clock_t start = clock();
 
   result = generation_combinations(number_modes, number_combination, distance_matrix);
+clock_t end = clock();
+double time_run = (double) ((end - start)/(CLOCKS_PER_SEC/1000000));
+printf("--------------------------------\n");
+printf("Time run %.8f\n", time_run/1000000);
 
-  printf("--------------------------------\n");
-  printf("Матрица расстояний\n");
-  for (size_t i = 0; i < number_modes; i++) {
-    printf("|");
-    for (size_t j = 0; j < number_modes; j++) {
-      printf("%i|", distance_matrix[i][j]);
-    }
-    printf("\n");
-  }
-  printf("--------------------------------\n");
-  printf("Длина минимального пути: %i\n", result);
-  printf("--------------------------------\n");
 
   return 0;
 }
