@@ -35,3 +35,26 @@ void gen_p_q_g_t(int size_p, int size_q, mpz_t *p, mpz_t *q, mpz_t *g,
   free(buf_t_);
   free(buf_q);
 }
+
+void gen_x_y(mpz_t q, mpz_t *x, mpz_t *y) {
+  gmp_randstate_t state;
+  gmp_randinit_mt(state);
+  gmp_randseed_ui(state, time(NULL));
+  mpz_inits(*x, *y, 0);
+  mpz_urandomm(*x, state, q);
+  mpz_urandomm(*y, state, q);
+}
+
+void gen_X_Y(mpz_t p, mpz_t g, mpz_t x, mpz_t y, mpz_t *X, mpz_t *Y) {
+  mpz_inits(*X, *Y, 0);
+  mpz_powm(*X, g, x, p);
+  mpz_powm(*Y, g, y, p);
+}
+
+
+void gen_ka_kb(mpz_t x, mpz_t y, mpz_t p, mpz_t X, mpz_t Y, mpz_t *ka,
+               mpz_t *kb) {
+  mpz_inits(*ka, *kb, 0);
+  mpz_powm(*ka, Y, x, p);
+  mpz_powm(*kb, X, y, p);
+}
