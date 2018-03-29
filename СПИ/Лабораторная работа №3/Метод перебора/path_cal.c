@@ -2,13 +2,9 @@
 
 int path_cal(int number_modes, int *sequence, int **distance_matrix) {
   int result = 0;
-  int node;
-  node = sequence[0];
-  result += distance_matrix[0][node];
-  node = sequence[number_modes - 2];
-  result += distance_matrix[node][0];
-  for (int i = 0; i < (number_modes - 2); i++) {
+  for (int i = 0; i < (number_modes - 1); i++) {
     result += distance_matrix[sequence[i]][sequence[i + 1]];
   }
+  result += distance_matrix[sequence[number_modes - 1]][sequence[0]];
   return result;
 }
