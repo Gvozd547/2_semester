@@ -1,34 +1,20 @@
 #include "28147_14.h"
 
 unsigned char multiplic_polynom(unsigned char a, unsigned char b) {
-  int polynomial = 0x1C3; // полином x^8+x^7+x^6+x+1
-  int count = b; // число для определения крайнего бита и завешения цикла
-  int buffer, bit;
-  int result = 0;
+  int polynomial = 0x1C3;
+  int result = 0x00;
+  int buffer = a;
   int first_run = 1;
-  int first_xor = 1;
-  /* Цикл, реализующий умножение 2-х полиномов */
-  while (count != 0) {
+  for (size_t i = 0; ((b >> i) != 0); i++) {
     if (first_run == 0)
-      buffer = buffer << 1; // сдвиг буфера 1 бит влево
-    else {
-      buffer = a; // первого промежуточное значение буфера
+      buffer = buffer << 1;
+    else
       first_run = 0;
-    }
-    if (buffer & 0x100) { // операция mod, если 9 бит равен 1
+    if (buffer & 0x100)
       buffer = buffer ^ polynomial;
+    if (((b >> i) & 0x01) == 1) {
+      result = result ^ buffer;
     }
-    bit = count & 0x01; // определение значения исследуемого бита
-    if (bit == 1) {
-      if (first_xor == 0)
-        result = result ^ buffer;
-      else {
-        result = buffer; // первого промежуточное значение результата
-        first_xor = 0;
-      }
-    }
-    count = count >> 1; // сдвиг счетчика на 1 бит вправо
-    ;
   }
   return result;
 }
