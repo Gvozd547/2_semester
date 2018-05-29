@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
+#include "gost3411-2012-core.h"
 
 struct additional_data {
   u8 iv[16];

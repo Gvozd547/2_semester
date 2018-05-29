@@ -2,6 +2,8 @@
 
 int main(int argc, char const *argv[]) {
 
+  srand(time(NULL));
+
   // Создание сокета для отправки сообщений пользователю A
   struct sockaddr_in user_addr_b_send;
   user_addr_b_send.sin_family = AF_INET;
@@ -78,6 +80,24 @@ int main(int argc, char const *argv[]) {
   gmp_printf("Общий ключ: %Zx\n", sb);
   printf("-----------------------------------------------------------------\n");
 
+  // Вычисление HASH функции
+  char key_sb[256];
+  memset(key_sb, 0, 256);
+  mpz_get_str(key_sb, 16, sb);
+  GOST34112012Context CTX;
+  u8 key[16];
+  memset(key, 0, 16);
+  GOST34112012Init(&CTX, 256);
+  GOST34112012Update(&CTX, (unsigned char *)key_sb, strlen(key_sb));
+  GOST34112012Final(&CTX, key);
+  printf("HASH функция вычислена\n");
+  printf("-----------------------------------------------------------------\n");
+  printf("HASH функция: ");
+  for (int i = 0; i < 32; i++)
+    printf("%0X", key[i]);
+  printf("\n");
+  printf("-----------------------------------------------------------------\n");
+
   // Инициалицация структуры состояния генератора
   ECRYPT_ctx ctx;
   ECRYPT_init();
@@ -85,13 +105,6 @@ int main(int argc, char const *argv[]) {
   printf("-----------------------------------------------------------------\n");
 
   // Установка секретного ключа в структуру
-  u8 key[16];
-  memset(key, 0, 16);
-  char key_sb[256];
-  memset(key_sb, 0, 256);
-  mpz_get_str(key_sb, 16, sb);
-  for (size_t i = 0; i < 16; i++)
-    key[i] = (key_sb[i * 2] << 4) + key_sb[i * 2 + 1];
   ECRYPT_keysetup(&ctx, key, 128, 128);
   printf("Секретный ключ установлен в структуру\n");
   printf("-----------------------------------------------------------------\n");

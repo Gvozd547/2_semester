@@ -75,6 +75,8 @@ int main(int argc, char const *argv[]) {
   mpz_t sa;
   gen_sa(p, X, Y, B, a, x, q, &sa);
   printf("-----------------------------------------------------------------\n");
+  printf("Расчитал общий ключ\n");
+  printf("-----------------------------------------------------------------\n");;
   gmp_printf("Общий ключ: %Zx\n", sa);
   printf("-----------------------------------------------------------------\n");
 
@@ -90,7 +92,7 @@ int main(int argc, char const *argv[]) {
   }
   printf("Принял дополнительные данные\n");
   printf("-----------------------------------------------------------------\n");
-  printf("Инициализирующий вектор: %s", additional_data->iv);
+  printf("Инициализирующий вектор: %s\n", additional_data->iv);
   printf("-----------------------------------------------------------------\n");
   printf("Длина зашифрованного сообщения: %i\n",
          additional_data->length_message);
@@ -112,6 +114,24 @@ int main(int argc, char const *argv[]) {
   printf("\n");
   printf("-----------------------------------------------------------------\n");
 
+  // Вычисление HASH функции
+  char key_sa[256];
+  memset(key_sa, 0, 256);
+  mpz_get_str(key_sa, 16, sa);
+  GOST34112012Context CTX;
+  u8 key[16];
+  memset(key, 0, 16);
+  GOST34112012Init(&CTX, 256);
+  GOST34112012Update(&CTX, (unsigned char *)key_sa, strlen(key_sa));
+  GOST34112012Final(&CTX, key);
+  printf("HASH функция вычислена\n");
+  printf("-----------------------------------------------------------------\n");
+  printf("HASH функция: ");
+  for (int i = 0; i < 32; i++)
+    printf("%0X", key[i]);
+  printf("\n");
+  printf("-----------------------------------------------------------------\n");
+
   // Инициалицация структуры состояния генератора
   ECRYPT_ctx ctx;
   ECRYPT_init();
@@ -119,13 +139,6 @@ int main(int argc, char const *argv[]) {
   printf("-----------------------------------------------------------------\n");
 
   // Установка секретного ключа в структуру
-  u8 key[16];
-  memset(key, 0, 16);
-  char key_sa[256];
-  memset(key_sa, 0, 256);
-  mpz_get_str(key_sa, 16, sa);
-  for (size_t i = 0; i < 16; i++)
-    key[i] = (key_sa[i * 2] << 4) + key_sa[i * 2 + 1];
   ECRYPT_keysetup(&ctx, key, 128, 128);
   printf("Секретный ключ установлен в структуру\n");
   printf("-----------------------------------------------------------------\n");
